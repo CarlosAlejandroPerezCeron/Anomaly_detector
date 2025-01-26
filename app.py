@@ -8,8 +8,11 @@ import time
 
 st.title("Dashboard de Detección de Anomalías en Tiempo Real")
 
-# Cargar el modelo entrenado
+from tensorflow.keras.models import load_model
+
+# Cargar el modelo normalmente
 model = load_model("anomaly_detector_model.h5")
+
 
 # Contenedor para los datos en tiempo real
 placeholder = st.empty()
