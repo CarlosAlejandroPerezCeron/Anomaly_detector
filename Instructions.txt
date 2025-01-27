@@ -1,0 +1,120 @@
+Project: Multi-modal Anomaly Detection
+This project applies Deep Learning (autoencoder) to detect anomalies in different types of files (text, images, audio, PDF, etc.). An interactive dashboard with Streamlit is included to upload files and determine if they are normal or anomalous based on the reconstruction error.
+
+Table of Contents
+Requirements
+Project Structure
+Installation and Configuration
+Model Training (Retraining)
+Running the Dashboard
+Handling Large Models
+How to Use the Dashboard
+Contribute
+License
+Requirements
+Python 3.8+
+Core libraries:
+tensorflow
+pandas
+numpy
+matplotlib
+scikit-learn
+streamlit
+pillow (for processing images)
+librosa (for audio)
+PyPDF2 (for reading PDFs)
+Note: Using GitHub Codespaces is optional, but the project is designed to work there as well.
+
+Project Structure
+lua
+Copy
+Anomaly_Detector/
+├── README.md <-- This file
+├── app.py <-- Streamlit Dashboard
+├── .gitignore <-- Ignore .h5 model and large files
+├── src/
+│ ├── __init__.py <-- Convert src to a package
+│ ├── universal_preprocessing.py
+│ ├── train_universal_model.py
+│ └── ... (other scripts)
+├── multimodal_data/ <-- Folder with files to train (text, images, audio, PDF)
+└── ... (additional files)
+app.py: Main code for the dashboard using Streamlit.
+universal_preprocessing.py: Logic to extract features from different formats (text, image, audio, PDF).
+train_universal_model.py: Script to train the multi-modal autoencoder and generate universal_anomaly_detector.h5.
+multimodal_data/: Folder containing examples of “normal” data to train.
+Installation and Configuration
+Clone the repository:
+
+bash
+Copy
+git clone https://github.com/YOUR_USER/Anomaly_Detector.git
+cd Anomaly_Detector
+Install dependencies:
+
+bash
+Copy
+pip install -r requirements.txt
+If you don't have a requirements.txt, install manually:
+
+bash
+Copy
+pip install tensorflow pandas numpy matplotlib scikit-learn streamlit pillow librosa PyPDF2
+(Optional) Codespaces
+
+Open the repository in GitHub Codespaces.
+In the integrated terminal, run the same installation commands.
+Training the Model (Retraining)
+If the universal_anomaly_detector.h5 model does not exist locally, or you want to update it with new data, retrain it with:
+
+bash
+Copy
+python src/train_universal_model.py
+Make sure there are example files in the multimodal_data/ folder (text, images, audio, PDF) that represent “normal” data.
+The script:
+Collect features with universal_preprocessing.py.
+Train a densely connected autoencoder.
+Save the model to universal_anomaly_detector.h5.
+Note: If universal_anomaly_detector.h5 is too large, it will not be uploaded to GitHub due to limitations (see Handling Large Models).
+
+Running the Dashboard
+Run in the root of the project:
+
+bash
+Copy
+streamlit run app.py
+You will see something like:
+
+arduino
+Copy
+You can now view your Streamlit app in your browser.
+Local URL: http://localhost:8501
+Network URL: http://xxx.xxx.xx.xx:8501
+Open the URL in your browser to see the dashboard.
+
+Handling Large Models
+The universal_anomaly_detector.h5 file can be very large (+1GB) and exceed GitHub's free limits.
+Solutions:
+Don't upload the .h5 to the repo (it is ignored in .gitignore) and retrain locally or in Codespaces every time.
+Store the model on another service (Drive, S3, etc.) and download it when you need to use it.
+Reduce the model size (pruning, quantization) so that it does not exceed 100 MB.
+Upgrade to a higher Git LFS plan (paid option) if you want to upload large files.
+By default, this project ignores .h5 files in .gitignore, to avoid errors when doing git push.
+
+How to Use the Dashboard
+Upload files (text, image, audio, PDF) in the “Upload any file” section:
+The system will convert the file into a feature vector (dimension ~13824).
+The autoencoder will try to reconstruct it.
+The reconstruction error is calculated.
+Threshold:
+By default, it is set to 0.05 in app.py.
+Adjust this value according to your normal data to reduce false positives or negatives.
+Results:
+If error > threshold, it is considered an anomaly.
+Otherwise, it is shown as normal.
+Contribute
+Fork the project.
+Create a feature branch: git checkout -b feature/new-feature.
+Make your changes and commit: git commit -m "Add new feature".
+Push the branch: git push origin feature/new-feature.
+Create a Pull Request on GitHub.
